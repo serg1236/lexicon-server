@@ -38,6 +38,7 @@
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
                 <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">${hibernate.ddl-auto}</prop>
             </props>
         </property>
     </bean>
