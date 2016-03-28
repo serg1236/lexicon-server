@@ -137,20 +137,6 @@
 		</dependency>
 
 	</dependencies>
-	<!-- <build> -->
-	<!-- <finalName>Lexic-On</finalName> -->
-	<!-- <plugins> -->
-	<!-- <plugin> -->
-	<!-- <groupId>org.apache.tomcat.maven</groupId> -->
-	<!-- <artifactId>tomcat7-maven-plugin</artifactId> -->
-	<!-- <version>2.2</version> -->
-	<!-- <configuration> -->
-	<!-- <path>/</path> -->
-	<!-- <port>8080</port> -->
-	<!-- </configuration> -->
-	<!-- </plugin> -->
-	<!-- </plugins> -->
-	<!-- </build> -->
 
 	<build>
 		<plugins>
@@ -189,6 +175,12 @@
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 									<mainClass>com.lexicon.server.EmbeddedJetty</mainClass>
+								</transformer>
+								<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+									<resource>META-INF/spring.handlers</resource>
+								</transformer>
+								<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+									<resource>META-INF/spring.schemas</resource>
 								</transformer>
 							</transformers>
 							<filters>

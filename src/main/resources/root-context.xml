@@ -3,7 +3,6 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:mvc="http://www.springframework.org/schema/mvc"
     xmlns:util="http://www.springframework.org/schema/util"
-    xmlns:p="http://www.springframework.org/schema/p"
     xmlns:jpa="http://www.springframework.org/schema/data/jpa"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -12,16 +11,16 @@
     http://www.springframework.org/schema/util
     http://www.springframework.org/schema/util/spring-util-3.2.xsd
     http://www.springframework.org/schema/data/jpa
-    http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+    http://www.springframework.org/schema/data/jpa/spring-jpa-1.0.xsd">
 
-    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+<!--    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
                 <value>${dbConfig}</value>
             </list>
         </property>
         <property name="ignoreResourceNotFound" value="false" />
-    </bean>
+    </bean>-->
 
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
@@ -30,7 +29,6 @@
             <value type="java.lang.Class">org.hibernate.ejb.HibernatePersistence</value>
         </property>
         <property name="persistenceUnitName" value="myPersistenceUnit" />
-        <property name="persistenceXmlLocation" value="classpath:persistence.xml"/>
         <property name="packagesToScan">
             <list>
                 <value>com.lexicon.model</value>
@@ -45,16 +43,16 @@
     </bean>
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="${jdbc.driverClassName}"/>
-        <property name="url" value="${jdbc.url}"/>
-        <property name="username" value="${jdbc.username}"/>
-        <property name="password" value="${jdbc.password}"/>
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="#{systemProperties['dbConfig'].equals('local')?'jdbc:postgresql://localhost:5432/imagine':''}"/>
+        <property name="username" value="#{systemProperties['dbConfig'].equals('local')?'postgres':''}"/>
+        <property name="password" value="#{systemProperties['dbConfig'].equals('local')?'1111':''}"/>
     </bean>
 
-<!--     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"> -->
-<!--         <property name="entityManagerFactory" ref="entityManagerFactory"/> -->
-<!--     </bean> -->
+     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+         <property name="entityManagerFactory" ref="entityManagerFactory"/>
+     </bean>
 
-<!--     <jpa:repositories base-package="com.lexicon.repository"/> -->
+    <jpa:repositories base-package="com.lexicon.repository"/>
 
 </beans>
