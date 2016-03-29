@@ -17,7 +17,7 @@ import com.lexicon.repository.UserRepository;
 import com.lexicon.repository.VocabularyRepository;
 
 @RestController
-@RequestMapping("/vocabylary")
+@RequestMapping("/vocabulary")
 public class VocabularyController {
 	
 	@Autowired
@@ -29,13 +29,18 @@ public class VocabularyController {
 	@RequestMapping(value="getAll", produces="text/plain;charset=UTF-8")
 	@ResponseBody
 	public String getAll(@RequestParam String login) {
-		User user = userRepository.findByLogin(login);
+		User user = userRepository.findByFbLogin(login);
 		List<Vocabulary> vocabularies = null;
 		if(user != null) {
-			vocabularies = vocabularyRepository.findByUserLogin(login);
+			try {
+				vocabularies = vocabularyRepository.findByCustomer(user);
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+			
 		} else {
 			user = new User();
-			user.setLogin(login);
+			user.setFbLogin(login);
 			userRepository.save(user);
 			vocabularies = new ArrayList<Vocabulary>();
 		}
@@ -50,8 +55,6 @@ public class VocabularyController {
 	public void setUserRepository(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
-	
-	
 	
 	
 }

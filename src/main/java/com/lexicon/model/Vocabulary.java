@@ -2,29 +2,33 @@ package com.lexicon.model;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 import com.google.gson.annotations.Expose;
 
 @Entity
+@NamedQuery(name="Vocabulary.findAllCustom", query="select v from Vocabulary v join v.customer c where c in(select u from User u where u.fbLogin=:fbLogin)")
 public class Vocabulary {
 	
 	@GeneratedValue
 	@Id
 	private int id;	
 	@Expose
+	@Column(name="fromLang")
 	private String from;
 	@Expose
+	@Column(name="toLang")
 	private String to;
-	@OneToMany(mappedBy="vocabulary")
-	private List<Category> categories;
 	@ManyToOne
-	private User user;
-	@OneToMany(mappedBy="vocabulary")
+	private User customer;
+	@OneToMany(mappedBy="vocabulary", fetch=FetchType.EAGER)
 	@Expose
 	private List<Word> words;
 	public int getId() {
@@ -45,17 +49,11 @@ public class Vocabulary {
 	public void setTo(String to) {
 		this.to = to;
 	}
-	public List<Category> getCategories() {
-		return categories;
+	public User getCustomer() {
+		return customer;
 	}
-	public void setCategories(List<Category> categories) {
-		this.categories = categories;
-	}
-	public User getUser() {
-		return user;
-	}
-	public void setUser(User user) {
-		this.user = user;
+	public void setCustomer(User customer) {
+		this.customer = customer;
 	}
 	public List<Word> getWords() {
 		return words;

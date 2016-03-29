@@ -1,3 +1,7 @@
 .settings/
 .classpath
 .project
+target/classes/
+target/maven-classes/
+target/maven-status/
+target/test-classes/

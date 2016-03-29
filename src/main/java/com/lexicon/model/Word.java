@@ -2,12 +2,16 @@ package com.lexicon.model;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import com.google.gson.annotations.Expose;
 
@@ -20,15 +24,16 @@ public class Word {
 	@Expose
 	private String name;
 	@ElementCollection
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@Expose
 	private List<String> translations;
-	@ManyToMany
-	private List<Category> categories;
 	@ManyToOne
 	private Vocabulary vocabulary;
 	@Expose
+	@Column(name="fromLang")
 	private String from;
 	@Expose
+	@Column(name="toLang")
 	private String to;
 	
 	private String imageToken;
@@ -50,12 +55,6 @@ public class Word {
 	}
 	public void setTranslations(List<String> translations) {
 		this.translations = translations;
-	}
-	public List<Category> getCategories() {
-		return categories;
-	}
-	public void setCategories(List<Category> categories) {
-		this.categories = categories;
 	}
 	public Vocabulary getVocabulary() {
 		return vocabulary;

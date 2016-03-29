@@ -1,13 +1,16 @@
 package com.lexicon.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.lexicon.model.User;
 import com.lexicon.model.Vocabulary;
 import com.lexicon.model.Word;
 import com.lexicon.repository.UserRepository;
@@ -40,17 +43,22 @@ public class WordController {
 		return wordJson;
 	}
 	
-	@RequestMapping(value="/save")
-	public String save(@RequestParam("word") String json, @RequestParam String login) {
+	@RequestMapping(value="/save", method={RequestMethod.POST, RequestMethod.GET})
+	public String save(@RequestParam("word") String json, @RequestParam("login") String login) {
+		System.out.println("LOGIN!!!!!!!"+login+"<<<<<");
 		Word word = gson.fromJson(json, Word.class);
 		Vocabulary vocabulary = 
-				vocabularyRepository.findByFromAndToAndUserLogin(word.getFrom(), word.getTo(), login);
+				vocabularyRepository.findByFromAndToAndCustomerFbLogin(word.getFrom(), word.getTo(), login);
 		if(vocabulary == null) {
 			
 			vocabulary = new Vocabulary();
 			vocabulary.setFrom(word.getFrom());
 			vocabulary.setTo(word.getTo());
-			vocabulary.setUser(userRepository.findByLogin(login));
+			User customer = userRepository.findByFbLogin(login);
+			if(customer == null) {
+				System.out.println("Cannot find user!");
+			}
+			vocabulary.setCustomer(customer);
 			vocabulary = vocabularyRepository.save(vocabulary);
 		}
 		word.setVocabulary(vocabulary);

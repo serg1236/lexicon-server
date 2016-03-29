@@ -18,10 +18,10 @@ public class UserController {
 	@RequestMapping("/{login}")
 	public String getUser(@PathVariable String login) {
 		User user = new User();
-		user.setLogin(login);
+		user.setFbLogin(login);
 		userRepository.save(user);
-		User foundUser = userRepository.findByLogin(login);	
-		return "Login: "+foundUser.getLogin();
+		User foundUser = userRepository.findByFbLogin(login);	
+		return "Login: "+foundUser.getFbLogin();
 	}
 
 	public void setUserRepository(UserRepository userRepository) {

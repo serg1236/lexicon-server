@@ -14,9 +14,10 @@ public class User {
 	@Id
 	private int id;
 	@Expose
-	private String login;
+	@Column(name="fbLogin")
+	private String fbLogin;
 	
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="customer")
 	private List<Vocabulary> vocabularies;
 	
 	public int getId() {
@@ -25,11 +26,11 @@ public class User {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getLogin() {
-		return login;
+	public String getFbLogin() {
+		return fbLogin;
 	}
-	public void setLogin(String login) {
-		this.login = login;
+	public void setFbLogin(String fbLogin) {
+		this.fbLogin = fbLogin;
 	}
 	public List<Vocabulary> getVocabularies() {
 		return vocabularies;
