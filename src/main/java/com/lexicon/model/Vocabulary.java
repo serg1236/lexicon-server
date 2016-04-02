@@ -1,7 +1,9 @@
 package com.lexicon.model;
 
 import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import com.google.gson.annotations.Expose;
 
@@ -28,9 +31,12 @@ public class Vocabulary {
 	private String to;
 	@ManyToOne
 	private User customer;
-	@OneToMany(mappedBy="vocabulary", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="vocabulary", fetch=FetchType.EAGER, cascade=CascadeType.REMOVE)
 	@Expose
 	private List<Word> words;
+	@Transient	
+	@Expose
+	private Set<String> categories;
 	public int getId() {
 		return id;
 	}
@@ -61,5 +67,12 @@ public class Vocabulary {
 	public void setWords(List<Word> words) {
 		this.words = words;
 	}
+	public Set<String> getCategories() {
+		return categories;
+	}
+	public void setCategories(Set<String> categories) {
+		this.categories = categories;
+	}
 	
+
 }

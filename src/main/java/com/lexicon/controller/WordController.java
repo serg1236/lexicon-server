@@ -1,5 +1,9 @@
 package com.lexicon.controller;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,12 +49,15 @@ public class WordController {
 	
 	@RequestMapping(value="/save", method={RequestMethod.POST, RequestMethod.GET})
 	public String save(@RequestParam("word") String json, @RequestParam("login") String login) {
-		System.out.println("LOGIN!!!!!!!"+login+"<<<<<");
 		Word word = gson.fromJson(json, Word.class);
+		Word foundWord = wordRepository.findByNameIgnoreCaseAndFromAndToAndVocabularyCustomerFbLogin(word.getName(),word.getFrom(), word.getTo(), login);
 		Vocabulary vocabulary = 
 				vocabularyRepository.findByFromAndToAndCustomerFbLogin(word.getFrom(), word.getTo(), login);
+		if(foundWord != null) {
+			System.out.println("word exists already. Deleting...");
+			wordRepository.delete(foundWord);
+		}
 		if(vocabulary == null) {
-			
 			vocabulary = new Vocabulary();
 			vocabulary.setFrom(word.getFrom());
 			vocabulary.setTo(word.getTo());
@@ -64,6 +71,33 @@ public class WordController {
 		word.setVocabulary(vocabulary);
 		wordRepository.save(word);
 		return "OK";
+	}
+	
+	@RequestMapping("/delete")
+	public String delete(@RequestParam("word") String json, @RequestParam("login") String login) {
+		Word word = gson.fromJson(json, Word.class);
+		Word foundWord = wordRepository.findByNameIgnoreCaseAndFromAndToAndVocabularyCustomerFbLogin(word.getName(),word.getFrom(), word.getTo(), login);
+		if(foundWord != null) {
+			wordRepository.delete(foundWord);
+		}
+		return "OK";
+	}
+	
+	@RequestMapping(value="/filter",  produces="text/plain;charset=UTF-8")
+	public String filter(@RequestParam String from, @RequestParam String to, @RequestParam String category, @RequestParam String login) {
+		Vocabulary vocabulary = vocabularyRepository.findByFromAndToAndCustomerFbLogin(from, to, login);
+		List<Word> words = new ArrayList<Word>();
+		if(vocabulary != null && vocabulary.getWords() != null) {
+			words = vocabulary.getWords();
+			Iterator<Word> iter = words.iterator();
+			while(iter.hasNext()) {
+				Word word = iter.next();
+				if(word.getCategories() == null || !word.getCategories().contains(category)) {
+					iter.remove();
+				}
+			}
+		}
+		return gson.toJson(words);
 	}
 
 	public void setVocabularyRepository(VocabularyRepository vocabularyRepository) {

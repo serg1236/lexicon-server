@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -35,6 +34,10 @@ public class Word {
 	@Expose
 	@Column(name="toLang")
 	private String to;
+	@Expose
+	@ElementCollection
+	@LazyCollection(LazyCollectionOption.FALSE)
+	private List<String> categories;
 	
 	private String imageToken;
 	
@@ -80,6 +83,10 @@ public class Word {
 	public void setTo(String to) {
 		this.to = to;
 	}
-	
-
+	public List<String> getCategories() {
+		return categories;
+	}
+	public void setCategories(List<String> categories) {
+		this.categories = categories;
+	}
 }
