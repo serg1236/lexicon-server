@@ -68,7 +68,7 @@ public class VocabularyController {
 			for(Word word: vocabulary.getWords()) {
 				if(word.getCategories() != null){
 					for(String category: word.getCategories()) {
-						categories.add(category.toLowerCase());
+						categories.add(category);
 					}
 				}
 			}

@@ -1,6 +1,7 @@
 package com.lexicon.model;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -37,7 +38,7 @@ public class Word {
 	@Expose
 	@ElementCollection
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<String> categories;
+	private Set<String> categories;
 	
 	private String imageToken;
 	
@@ -83,10 +84,10 @@ public class Word {
 	public void setTo(String to) {
 		this.to = to;
 	}
-	public List<String> getCategories() {
+	public Set<String> getCategories() {
 		return categories;
 	}
-	public void setCategories(List<String> categories) {
+	public void setCategories(Set<String> categories) {
 		this.categories = categories;
 	}
 }
