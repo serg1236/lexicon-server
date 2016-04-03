@@ -3,6 +3,7 @@ package com.lexicon.controller;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -70,7 +71,8 @@ public class VocabularyController {
 	}
 	
 	public static void extractCategories(Vocabulary vocabulary) {
-		Set<String> categories = new HashSet<String>();
+		Set<String> categories = new LinkedHashSet<String>();
+		categories.add("All");
 		if(vocabulary.getWords() != null) {
 			for(Word word: vocabulary.getWords()) {
 				if(word.getCategories() != null){
