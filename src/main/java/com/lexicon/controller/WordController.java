@@ -1,11 +1,9 @@
 package com.lexicon.controller;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -86,8 +84,9 @@ public class WordController {
 	@RequestMapping(value="/filter",  produces="text/plain;charset=UTF-8")
 	public String filter(@RequestParam String from, @RequestParam String to, @RequestParam String category, @RequestParam String login) {
 		Vocabulary vocabulary = vocabularyRepository.findByFromAndToAndCustomerFbLogin(from, to, login);
-		if(! "all".equals(category.toLowerCase())) {
-			if(vocabulary != null && vocabulary.getWords() != null) {
+		if(vocabulary != null && vocabulary.getWords() != null) {
+			VocabularyController.extractCategories(vocabulary);
+			if(! "all".equals(category.toLowerCase())) {
 				List<Word> words = vocabulary.getWords();
 				Iterator<Word> iter = words.iterator();
 				while(iter.hasNext()) {

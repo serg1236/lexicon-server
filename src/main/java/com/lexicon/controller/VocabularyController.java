@@ -69,7 +69,7 @@ public class VocabularyController {
 		this.userRepository = userRepository;
 	}
 	
-	private void extractCategories(Vocabulary vocabulary) {
+	public static void extractCategories(Vocabulary vocabulary) {
 		Set<String> categories = new HashSet<String>();
 		if(vocabulary.getWords() != null) {
 			for(Word word: vocabulary.getWords()) {
