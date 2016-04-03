@@ -86,18 +86,19 @@ public class WordController {
 	@RequestMapping(value="/filter",  produces="text/plain;charset=UTF-8")
 	public String filter(@RequestParam String from, @RequestParam String to, @RequestParam String category, @RequestParam String login) {
 		Vocabulary vocabulary = vocabularyRepository.findByFromAndToAndCustomerFbLogin(from, to, login);
-		List<Word> words = new ArrayList<Word>();
-		if(vocabulary != null && vocabulary.getWords() != null) {
-			words = vocabulary.getWords();
-			Iterator<Word> iter = words.iterator();
-			while(iter.hasNext()) {
-				Word word = iter.next();
-				if(word.getCategories() == null || !word.getCategories().contains(category)) {
-					iter.remove();
+		if(! "all".equals(category.toLowerCase())) {
+			if(vocabulary != null && vocabulary.getWords() != null) {
+				List<Word> words = vocabulary.getWords();
+				Iterator<Word> iter = words.iterator();
+				while(iter.hasNext()) {
+					Word word = iter.next();
+					if(word.getCategories() == null || !word.getCategories().contains(category)) {
+						iter.remove();
+					}
 				}
 			}
 		}
-		return gson.toJson(words);
+		return gson.toJson(vocabulary);
 	}
 
 	public void setVocabularyRepository(VocabularyRepository vocabularyRepository) {
