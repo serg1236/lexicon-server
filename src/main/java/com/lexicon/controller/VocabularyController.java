@@ -2,6 +2,7 @@ package com.lexicon.controller;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -37,8 +38,14 @@ public class VocabularyController {
 		if(user != null) {
 			try {
 				vocabularies = vocabularyRepository.findByCustomer(user);
-				for(Vocabulary vocabulary: vocabularies) {
-					extractCategories(vocabulary);
+				Iterator<Vocabulary> iter = vocabularies.iterator();
+				while(iter.hasNext()) {
+					Vocabulary vocabulary = iter.next();
+					if(vocabulary.getWords() == null || vocabulary.getWords().isEmpty()) {
+						iter.remove();
+					} else {
+						extractCategories(vocabulary);
+					}
 				}
 			} catch (Exception e) {
 				System.out.println(e);
